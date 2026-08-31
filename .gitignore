@@ -21,3 +21,5 @@ coverage/
 
 .cache/
 .vite/
+node_modules/
+.eslintcache
