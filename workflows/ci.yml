@@ -1,0 +1,64 @@
+name: Intégration Continue (CI)
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  # 1. Vérification du code
+  linting:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install & Lint Backend
+        run: |
+          cd backend
+          npm ci
+          npm run lint || echo "Linting backend à configurer"
+      - name: Install & Lint Frontend
+        run: |
+          cd frontend
+          npm ci
+          npm run lint || echo "Linting frontend à configurer"
+
+  # 2. Tests Backend (Unitaires & API)
+  backend-tests:
+    needs: linting
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install Backend
+        run: cd backend && npm ci
+      - name: Run Tests & Coverage
+        run: cd backend && npm test -- --coverage
+
+  # 3. Tests E2E (Selenium)
+  e2e-tests:
+    needs: backend-tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install all dependencies
+        run: |
+          cd backend && npm ci
+          cd ../frontend && npm ci
+          cd ../tests && npm ci
+      - name: Start services in background
+        run: |
+          cd backend && npm start &
+          cd frontend && npm start &
+      - name: Wait for services to be ready
+        run: sleep 10 # Attendre que les serveurs démarrent
+      - name: Run Selenium Tests (Headless mode)
+        run: cd tests && npm run test:e2e
