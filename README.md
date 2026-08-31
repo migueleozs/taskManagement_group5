@@ -20,6 +20,11 @@ git add .
 git commit -m "Premier Organization d'arborescence"
 git push origin main
 
+**Configuration des permissions et/ou des branches**
+
+Nous avons mis les droits de protection sur la branche principale.
+![alt text](Captures/permissions_branches.png)
+
 
 2. **Configuration du workflow**
 
@@ -28,6 +33,14 @@ Une branche par fonctionnalité. À
 chaque nouvelle fonctionnalité, une nouvelle branche est
 créée. Une fois la fonctionnalité codée et testée, fusion de la
 branche avec master.
+
+3. **Organisation des équipes**
+   - Attribution des rôles : Tests, DevOps, etc...
+   - Création des issues pour chaque fonctionnalité/tâche/étape
+
+Nous avons creer les differentes branches et les avoirs attachés avec les issues, en donnant à chacun la responsabilité de chaque tâche, nous avons aussi défini les rôles de chacun. 
+   ![alt text](Captures/issues.png)
+
 
 
 **Analyse de code** avec ESLint
